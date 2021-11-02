@@ -1,0 +1,86 @@
+﻿@model HotelManagementSystem.ViewModel.AccomodationsViewModel
+
+<div class="hero-wrap" style="background-image: url('/images/bg_1.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="@Url.Action("Index","Home")">Home</a></span> <span>About</span></p>
+                    <h1 class="mb-4 bread">@Model.AccomodationType.Name</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model != null && Model.AccomodationPackages != null && Model.AccomodationPackages.Count()>0)
+{
+
+<section class="ftco-section bg-light ftco-no-pb">
+    <div class="container-fluid px-0">
+        <div class="row no-gutters justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <span class="subheading">Roxandrea Rooms</span>
+                <h2 class="mb-4">Hotel Master's Rooms</h2>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Accomodation Package
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                @foreach (var accomodationPackage in Model.AccomodationPackages)
+                {
+                    
+                  <a class="@( Model.SelectedAccomodationPackageID == accomodationPackage.ID ? "active" : string.Empty ) dropdown-item" href="@Url.Action("Index","Accomodations", new { area = "", accomodationTypeID = Model.AccomodationType.ID, accomodationPackageID = accomodationPackage.ID })">
+                            @accomodationPackage.Name
+                  </a>
+                    
+                }
+              
+            </div>
+        </div>
+
+        <div class="row no-gutters mt-4 mb-4">
+
+            @if (Model.Accomodations != null && Model.Accomodations.Count() > 0)
+            {
+                foreach (var accomodation in Model.Accomodations)
+                {
+                    <div class="col-lg-6">
+                        <div class="room-wrap d-md-flex">
+                            <a href="rooms-single.html" class="img" style="background-image: url(/images/room-1.jpg);"></a>
+                            <div class="half left-arrow d-flex align-items-center">
+                                <div class="text p-4 p-xl-5 text-center">
+                                    <p class="star mb-0"><span class="ion-ios-star"></span><span class="ion-ios-star"></span><span class="ion-ios-star"></span><span class="ion-ios-star"></span><span class="ion-ios-star"></span></p>
+                                    <p class="mb-0"><span class="price mr-1">$@accomodation.AccomodationPackage.FeePerNight</span> <span class="per">per night</span></p>
+                                    <h3 class="mb-3"><a href="rooms-single.html">@accomodation.Name</a></h3>
+                                    <ul>
+                                        <li>
+                                            <i class="icon-check"></i>
+                                            Only @accomodation.AccomodationPackage.NoOfRoom rooms are available.
+                                        </li>
+                                    </ul>
+                                    <p class="pt-1"><a href="rooms-single.html" class="btn-custom px-3 py-2"> Book Now!<span class="icon-long-arrow-right"></span></a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    No Accomodations Found.
+                </div>
+            }
+        </div>
+    </div>
+    </section>
+}
+
+
+

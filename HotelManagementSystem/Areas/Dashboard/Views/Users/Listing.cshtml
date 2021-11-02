@@ -1,0 +1,103 @@
+﻿@model HotelManagementSystem.Areas.Dashboard.ViewModels.UserListingModels
+
+@if (Model != null && Model.Users != null && Model.Users.Count() > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">FullName</th>
+                <th scope="col">Email</th>
+                <th scope="col">Username</th>
+                <th scope="col">Role</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @user.FullName
+                    </td>
+                    <td>
+                        @user.Email
+                    </td>
+                    <td>
+                        @user.UserName
+                    </td>
+                    <td>
+                        @user.Roles.Count
+                    </td>
+                    <td>
+                        <button data-href="@Url.Action("Action", "Users", new { ID = user.Id })" type="button" class="data-btn btn btn-primary"
+                                data-bs-toggle="modal" data-bs-target="#actionModal">
+                            <i class="fa fa-edit mr-1"></i> Edit
+                        </button>
+
+                        <button data-href="@Url.Action("Delete", "Users", new { ID = user.Id })" type="button" class="data-btn btn btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#actionModal">
+                            <i class="fa fa-trash mr-1"></i> Delete
+                        </button>
+
+                        <button data-href="@Url.Action("UserRoles", "Users", new { ID = user.Id })" type="button" class="data-btn btn btn-info"
+                                data-bs-toggle="modal" data-bs-target="#actionModal">
+                            <i class="fa fa-user mr-1"></i> Roles
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- pager -->
+    if (Model.pager.EndPage > 1)
+    {
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @if (Model.pager.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a href="@Url.Action("Index", "Users")" class="page-link">
+                            <i class="fa fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a href="@Url.Action("Index", "Users", new { page = Model.pager.CurrentPage - 1, searchTerm = Model.SearchTerm, roleID = Model.RoleID })" class="page-link">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+                {
+                    <li class="page-item @(page == Model.pager.CurrentPage ? "active" : "")">
+                        <a href="@Url.Action("Index", "Users", new { page =page, searchTerm = Model.SearchTerm, roleID = Model.RoleID  })" class="page-link">@page</a>
+                    </li>
+                }
+
+                @if (Model.pager.CurrentPage < Model.pager.TotalPages)
+                {
+                    <li class="page-item">
+                        <a href="@Url.Action("Index", "Users", new { page = Model.pager.CurrentPage + 1, searchTerm = Model.SearchTerm, roleID = Model.RoleID  })" class="page-link">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a href="@Url.Action("Index", "Users", new { page = Model.pager.TotalPages, searchTerm = Model.SearchTerm, roleID = Model.RoleID })" class="page-link">
+                            <i class="fa fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+    }
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Sorry! No records exist.
+    </div>
+}
+
